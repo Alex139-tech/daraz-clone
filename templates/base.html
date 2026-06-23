@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daraz Clone</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="bg-daraz">
+
+    <div class="container">
+
+        <!-- Top Bar -->
+        <div class="d-flex justify-content-end flex-wrap gap-4 py-2">
+
+            <a href="#" class="top-nav-link">
+                SAVE MORE ON APP
+            </a>
+
+            <a href="#" class="top-nav-link">
+                BECOME A SELLER
+            </a>
+
+            <a href="#" class="top-nav-link">
+                HELP & SUPPORT
+            </a>
+
+            <a href="#" class="top-nav-link">
+                LOGIN
+            </a>
+
+            <a href="#" class="top-nav-link">
+                SIGN UP
+            </a>
+
+            <a href="#" class="top-nav-link">
+                भाषा परिवर्तन
+            </a>
+
+        </div>
+
+        <!-- Logo + Search + Cart -->
+        <div class="row align-items-center pb-3 g-3">
+
+            <!-- Logo -->
+            <div class="col-lg-2 col-md-3 col-4">
+
+                <a href="/" class="navbar-brand m-0">
+
+                    <img
+                        src="{% static 'images/logo1.png' %}"
+                        alt="Logo"
+                        class="img-fluid logo-img"
+                    >
+
+                </a>
+
+            </div>
+
+            <!-- Search -->
+            <div class="col-lg-9 col-md-8 col-6">
+
+                <div class="input-group">
+
+                    <input
+                        type="text"
+                        class="form-control search-box"
+                        placeholder="Search in Daraz"
+                    >
+
+                    <button class="search-btn">
+
+                        <i class="bi bi-search"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Cart -->
+            <div class="col-lg-1 col-md-1 col-2 text-end">
+
+                <i class="bi bi-cart2 cart-icon"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- ================= SLIDER SECTION ================= -->
+
+<div class="container mt-3">
+
+    <div class="row g-2">
+
+        <!-- Slider -->
+        <div class="col-lg-9">
+
+            <div id="carouselExample"
+                 class="carousel slide"
+                 data-bs-ride="carousel">
+
+                <!-- Indicators -->
+                <div class="carousel-indicators">
+
+                    <button type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide-to="0"
+                            class="active">
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide-to="1">
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide-to="2">
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide-to="3">
+                    </button>
+
+                    <button type="button"
+                            data-bs-target="#carouselExample"
+                            data-bs-slide-to="4">
+                    </button>
+
+                </div>
+
+                <!-- Slides -->
+                <div class="carousel-inner rounded">
+
+                    <div class="carousel-item active">
+
+                        <img
+                            src="{% static 'images/photo1.png' %}"
+                            class="slider-img"
+                            alt=""
+                        >
+
+                    </div>
+
+                    <div class="carousel-item">
+
+                        <img
+                            src="{% static 'images/photo2.avif' %}"
+                            class="slider-img"
+                            alt=""
+                        >
+
+                    </div>
+
+                    <div class="carousel-item">
+
+                        <img
+                            src="{% static 'images/photo3.avif' %}"
+                            class="slider-img"
+                            alt=""
+                        >
+
+                    </div>
+
+                    <div class="carousel-item">
+
+                        <img
+                            src="{% static 'images/photo4.avif' %}"
+                            class="slider-img"
+                            alt=""
+                        >
+
+                    </div>
+
+                    <div class="carousel-item">
+
+                        <img
+                            src="{% static 'images/photo5.avif' %}"
+                            class="slider-img"
+                            alt=""
+                        >
+
+                    </div>
+
+                </div>
+
+                <!-- Left Arrow -->
+                <button
+                    class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+
+                    <span class="custom-arrow">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </span>
+
+                </button>
+
+                <!-- Right Arrow -->
+                <button
+                    class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+
+                    <span class="custom-arrow">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Side Banner -->
+        <div class="col-lg-3">
+
+            <img
+                src="{% static 'images/side-banner.png' %}"
+                class="side-banner"
+                alt=""
+            >
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= FLASH SALE ================= -->
+
+<div class="container mt-5">
+
+    <div class="d-flex align-items-center border-bottom pb-2 mb-4">
+
+        <h3 class="m-0 flash-title">
+
+            Flash Sale
+
+        </h3>
+
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script src="{% static 'base.js' %}"></script>
+
+</body>
+</html>

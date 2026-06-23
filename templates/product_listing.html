@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container my-5">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+        <h4 class="text-warning m-0">On Sale Now</h4>
+        <a href="#" class="btn btn-outline-warning btn-sm text-uppercase">
+            Shop All Products
+        </a>
+    </div>
+
+    <!-- Products -->
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2">
+
+        {% for product in products %}
+        <div class="col">
+            <a href="{% url 'product_detail' product.id %}" class="card h-100 border-0 text-decoration-none shadow-sm product-card">
+
+                <!-- Product Image -->
+                <div class="bg-light overflow-hidden" style="aspect-ratio:1/1;">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}"
+                         class="w-100 h-100"
+                         style="object-fit:cover;"
+                         alt="{{ product.title }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/300"
+                         class="w-100 h-100"
+                         style="object-fit:cover;"
+                         alt="No Image">
+                    {% endif %}
+                </div>
+
+                <!-- Product Body -->
+                <div class="card-body p-2">
+
+                    <!-- Title -->
+                    <p class="small text-dark mb-2 product-title">
+                        {{ product.title }}
+                    </p>
+
+                    <!-- Description -->
+                    <p class="text-muted small mb-2">
+                        {{ product.description|truncatechars:40 }}
+                    </p>
+
+                    <!-- Price -->
+                    <h6 class="text-warning mb-1">
+                        Rs. {{ product.current_price }}
+                    </h6>
+
+                    {% if product.original_price %}
+                    <div>
+                        <small class="text-muted text-decoration-line-through">
+                            Rs. {{ product.original_price }}
+                        </small>
+
+                        <small class="text-dark ms-1">
+                            -{{ product.discount_percentage }}%
+                        </small>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No products available.</p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>{% endblock content %}
