@@ -1,0 +1,15 @@
+.custom-shop-btn {
+        color: #f57224 !important;
+        border: 1px solid #f57224 !important;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    .custom-shop-btn:hover {
+        background-color: #f57224 !important;
+        color: #ffffff !important;
+    }
+    .timer-box {
+        min-width: 32px;
+        text-align: center;
+        display: inline-block;
+    }

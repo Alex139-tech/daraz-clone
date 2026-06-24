@@ -1,0 +1,62 @@
+/* Main Carousel */
+#carouselExample::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.18),
+        transparent
+    );
+    pointer-events: none;
+}
+
+/* Images */
+#carouselExample .carousel-item img {
+    height: 340px;
+    /* object-fit: cover; */
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+#carouselExample:hover .carousel-item img {
+    transform: scale(1.03);
+}
+
+/* Indicators */
+.carousel-indicators button {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50%;
+    margin: 0 5px !important;
+}
+
+/* Arrows */
+.carousel-control-prev,
+.carousel-control-next {
+    opacity: 0;
+    transition: 0.3s;
+}
+
+#carouselExample:hover .carousel-control-prev,
+#carouselExample:hover .carousel-control-next {
+    opacity: 1;
+}
+
+/* Arrow Background */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.45);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.side-banner {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.side-banner:hover {
+    transform: scale(1.02);
+}

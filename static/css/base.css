@@ -1,0 +1,50 @@
+/* ================= NAVBAR ================= */
+
+.bg-daraz {
+    background: #f85606;
+}
+
+.top-nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.top-nav-link:hover {
+    color: #f1f1f1;
+}
+
+.logo-img {
+    height: 42px;
+    object-fit: contain;
+}
+
+/* SEARCH */
+
+.search-box {
+    border: none !important;
+    border-radius: 4px 0 0 4px;
+    height: 45px;
+    box-shadow: none !important;
+}
+
+.search-btn {
+    background: #ffe1d2;
+    border: none;
+    padding: 0 20px;
+    color: #f85606;
+    border-radius: 0 4px 4px 0;
+}
+
+.search-btn:hover {
+    background: #ffd0bb;
+}
+
+/* CART */
+
+.cart-icon {
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
