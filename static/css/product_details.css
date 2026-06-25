@@ -31,3 +31,11 @@
     background-color: #f57224 !important;
     color: #ffffff !important;
 }
+
+.nav-tabs .nav-link.active {
+    border-bottom: 3px solid #f57224 !important;
+    background-color: #ffffff !important;
+  }
+  .nav-tabs .nav-link:hover {
+    color: #f57224 !important;
+  }

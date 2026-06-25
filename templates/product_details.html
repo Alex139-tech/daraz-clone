@@ -1,109 +1,481 @@
 {% extends 'base.html' %}
 
 {% block search_tags %}
-<div class="mt-1 small d-flex flex-wrap gap-3">
-  <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">shoes for men |</a>
-  <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">iphone 17 pro max |</a>
-  <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">earbuds |</a>
-  <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">laptop </a>
-</div>
+  <div class="mt-1 small d-flex flex-wrap gap-3">
+    <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">shoes for men |</a>
+    <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">iphone 17 pro max |</a>
+    <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">earbuds |</a>
+    <a href="#" class="text-light text-decoration-none" style="font-size: 13px;">laptop</a>
+  </div>
 {% endblock %}
 
 {% block breadcrumbs %}
-
-<!-- this is my category -->
-<div class="dropdown category-dropdown">
-    <button class="btn btn-link text-decoration-none dropdown-toggle fw-bold d-flex align-items-center gap-1 custom-main-btn" 
-            type="button" 
-            id="categoryMenu" 
-            data-bs-toggle="dropdown" 
-            aria-expanded="false">
-        <i class="bi bi-grid-3x3-gap-fill me-1 menu-icon"></i> Categories
+  <div class="dropdown category-dropdown">
+    <button class="btn btn-link text-decoration-none dropdown-toggle fw-bold d-flex align-items-center gap-1 custom-main-btn" type="button" id="categoryMenu" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="bi bi-grid-3x3-gap-fill me-1 menu-icon"></i> Categories
     </button>
-    
-    <ul class="dropdown-menu shadow-lg py-0 overflow-hidden rounded-3 mt-2" 
-        aria-labelledby="categoryMenu" 
-        style="min-width: 280px; background-color: #ffffff; border: 2px solid #f57224 !important;">
-        
+
+    <ul class="dropdown-menu shadow-lg py-0 overflow-hidden rounded-3 mt-2" aria-labelledby="categoryMenu" style="min-width: 280px; background-color: #ffffff; border: 2px solid #f57224 !important;">
+      {% for cat in categories %}
+        {% if not cat.parent %}
+          <li>
+            <a class="dropdown-item py-2 px-3 d-flex align-items-center justify-content-between custom-cat-item" href="#">
+              <span class="d-flex align-items-center gap-2">
+                <i class="bi bi-tags fs-6"></i>
+                {{ cat.name }}
+              </span>
+              <i class="bi bi-chevron-right small arrow-icon" style="font-size: 10px; color: #f57224;"></i>
+            </a>
+          </li>
+        {% endif %}
+      {% empty %}
         <li>
-            <a class="dropdown-item py-2.5 px-3 d-flex align-items-center justify-content-between custom-cat-item" 
-               href="#">
-                <span class="d-flex align-items-center gap-2">
-                    <i class="bi bi-laptop fs-6"></i> Electronic Devices
-                </span>
-                <i class="bi bi-chevron-right small arrow-icon" style="font-size: 10px; color: #f57224;"></i>
-            </a>
+          <a class="dropdown-item py-2 px-3 text-muted" href="#">No categories found</a>
         </li>
-        
-        <li>
-            <a class="dropdown-item py-2.5 px-3 d-flex align-items-center justify-content-between custom-cat-item" 
-               href="#">
-                <span class="d-flex align-items-center gap-2">
-                    <i class="bi bi-headphones fs-6"></i> Electronic Accessories
-                </span>
-                <i class="bi bi-chevron-right small arrow-icon" style="font-size: 10px; color: #f57224;"></i>
-            </a>
-        </li>
-        
-        <li>
-            <a class="dropdown-item py-2.5 px-3 d-flex align-items-center justify-content-between custom-cat-item" 
-               href="#">
-                <span class="d-flex align-items-center gap-2">
-                    <i class="bi bi-tv fs-6"></i> TV & Home Appliances
-                </span>
-                <i class="bi bi-chevron-right small arrow-icon" style="font-size: 10px; color: #f57224;"></i>
-            </a>
-        </li>
-        
-        <li style="background-color: #fff3ed;">
-            <a class="dropdown-item py-3 px-3 d-flex align-items-center justify-content-center fw-bold custom-cat-item-all" 
-               href="#">
-                <span class="d-flex align-items-center gap-2">
-                    <i class="bi bi-tags-fill fs-5"></i> Browse All Categories
-                </span>
-            </a>
-        </li>
+      {% endfor %}
+
+      <li style="background-color: #fff3ed; border-top: 1px solid #f57224;">
+        <a class="dropdown-item py-3 px-3 d-flex align-items-center justify-content-center fw-bold custom-cat-item-all" href="{% url 'product_list' %}">
+          <span class="d-flex align-items-center gap-2">
+            <i class="bi bi-tags-fill fs-5"></i> Browse All Categories
+          </span>
+        </a>
+      </li>
     </ul>
-</div>
+  </div>
 
+  <nav aria-label="breadcrumb" class="small pt-2 ms-2">
+    <ol class="breadcrumb m-0">
+      {% if product.category.parent.parent %}
+        <li class="breadcrumb-item">
+          <a href="#" class="text-info text-decoration-none">{{ product.category.parent.parent.name }}</a>
+        </li>
+      {% endif %}
 
-<nav aria-label="breadcrumb" class="small pt-2 ms-2">
-  <ol class="breadcrumb m-0">
-    <li class="breadcrumb-item"><a href="#" class="text-info text-decoration-none">Computers & Laptops</a></li>
-    <li class="breadcrumb-item"><a href="#" class="text-info text-decoration-none">Computer Accessories</a></li>
-    <li class="breadcrumb-item"><a href="#" class="text-info text-decoration-none">USB Fans</a></li>
-    <li class="breadcrumb-item active text-dark" aria-current="page">{{ product.title }}</li>
-  </ol>
-</nav>
+      {% if product.category.parent %}
+        <li class="breadcrumb-item">
+          <a href="#" class="text-info text-decoration-none">{{ product.category.parent.name }}</a>
+        </li>
+      {% endif %}
+
+      {% if product.category %}
+        <li class="breadcrumb-item">
+          <a href="#" class="text-info text-decoration-none">{{ product.category.name }}</a>
+        </li>
+      {% endif %}
+
+      <li class="breadcrumb-item active text-dark" aria-current="page">{{ product.title|truncatechars:40 }}</li>
+    </ol>
+  </nav>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="row">
-        
-        <div class="col-md-5">
-            <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.title }}">
-        </div>
-        
-        <div class="col-md-7">
-            <h2 class="fw-normal text-dark fs-4 mb-2">{{ product.title }}</h2>
-            
-            <h3 class="mb-3" style="color: #f57224;">
-                Rs. {{ product.current_price }}
-            </h3>
-
-            <p class="text-muted small mb-4">{{ product.description }}</p>
-
-            <div class="d-flex gap-3">
-                <button class="btn text-white px-5 py-2" style="background-color: #26abd4; border:none;">
-                    Buy Now
-                </button>
-                <button class="btn text-white px-5 py-2" style="background-color: #f57224; border:none;">
-                    Add to Cart
-                </button>
+  <div class="container my-4">
+    <div class="row g-4">
+      
+      <!-- Left Column: Product Details -->
+      <div class="col-12 col-lg-8">
+        <div class="row bg-white p-3 rounded shadow-sm">
+          
+          <!-- Product Images -->
+          <div class="col-md-5 mb-3">
+            <img src="{{ product.image.url }}" class="img-fluid rounded border w-100" alt="{{ product.title }}" />
+            <div class="d-flex gap-2 mt-2">
+              <img src="{{ product.image.url }}" class="img-fluid border p-1" style="width:60px; height:60px; object-fit:cover; cursor:pointer;" />
             </div>
+          </div>
+
+          <!-- Product Main Info -->
+          <div class="col-md-7">
+            <div class="card border rounded mb-3">
+              <div class="card-header bg-light border-bottom py-2 d-flex justify-content-between align-items-center">
+                <h5 class="m-0 text-dark fs-6 fw-semibold text-uppercase" style="letter-spacing: 0.5px;">Product Details of {{ product.title }}</h5>
+                <div class="d-flex gap-2 fs-5 text-secondary">
+                  <a href="#" class="text-secondary text-decoration-none"><i class="bi bi-share"></i></a>
+                  <a href="#" class="text-secondary text-decoration-none"><i class="bi bi-heart"></i></a>
+                </div>
+              </div>
+              <div class="card-body p-3 text-secondary" style="font-size: 14px; line-height: 1.6; white-space: pre-line;">
+                {{ product.description }}
+              </div>
+            </div>
+
+            <!-- Ratings Summary Badges -->
+            <div class="d-flex align-items-center flex-wrap gap-2 my-2" style="font-size: 13px;">
+              <span class="text-warning d-flex gap-0.5">
+                <i class="bi {% if product.rating >= 1 %}bi-star-fill{% elif product.rating >= 0.5 %}bi-star-half{% else %}bi-star{% endif %}"></i>
+                <i class="bi {% if product.rating >= 2 %}bi-star-fill{% elif product.rating >= 1.5 %}bi-star-half{% else %}bi-star{% endif %}"></i>
+                <i class="bi {% if product.rating >= 3 %}bi-star-fill{% elif product.rating >= 2.5 %}bi-star-half{% else %}bi-star{% endif %}"></i>
+                <i class="bi {% if product.rating >= 4 %}bi-star-fill{% elif product.rating >= 3.5 %}bi-star-half{% else %}bi-star{% endif %}"></i>
+                <i class="bi {% if product.rating >= 5 %}bi-star-fill{% elif product.rating >= 4.5 %}bi-star-half{% else %}bi-star{% endif %}"></i>
+              </span>
+              <span class="text-muted ms-1">({{ product.rating|default:'0.0' }})</span>
+              <a href="#reviews-tab" class="text-info text-decoration-none" onclick="document.getElementById('reviews-tab').click();">Ratings {{ product.total_ratings|default:'0' }}</a>
+              <span class="text-muted">|</span>
+              <a href="#" class="text-info text-decoration-none">{{ product.answered_questions_count|default:'0' }} Answered Questions</a>
+            </div>
+
+            <p class="text-muted mb-3" style="font-size: 13px;">
+              Brand: <span class="text-primary fw-medium">{{ product.brand_name|default:'No Brand' }}</span> |
+              <a href="#" class="text-info text-decoration-none">More from {{ product.brand_name|default:'No Brand' }}</a>
+            </p>
+
+            <!-- Vouchers Section -->
+            <div class="mb-4">
+              <span class="text-muted d-block mb-2" style="font-size: 13px;">Promotions & Vouchers:</span>
+              <div class="d-flex flex-wrap gap-2">
+                {% for voucher in product.vouchers.all %}
+                  {% if voucher.is_active %}
+                    <div class="d-flex align-items-center position-relative overflow-hidden rounded" style="background-color: #fff3ed; border: 1px dashed #f57224; padding: 6px 12px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                      <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-image: linear-gradient(to bottom, #f57224 50%, transparent 50%); background-size: 100% 8px;"></div>
+                      <div class="ps-1">
+                        <span class="fw-bold" style="color: #f57224; font-size: 14px;">{{ voucher.discount_title }}</span>
+                        <span class="text-muted d-block" style="font-size: 10px;">Min. Spend Rs. {{ voucher.min_spend }}</span>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% empty %}
+                  <span class="text-muted small italic">No vouchers available for this product right now.</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <hr class="my-3 text-black-50" />
+
+            <!-- Pricing Section -->
+            <div class="mb-3">
+              <h2 class="m-0 fw-normal" style="color: #f57224; font-size: 36px;">Rs. {{ product.current_price }}</h2>
+              {% if product.original_price > product.current_price %}
+                <p class="text-muted m-0" style="font-size: 14px;">
+                  <del>Rs. {{ product.original_price }}</del>
+                  <span class="text-dark fw-medium ms-1">-{{ product.discount_percentage }}%</span>
+                </p>
+              {% endif %}
+            </div>
+
+            <!-- Color Options -->
+            <div class="my-3" style="font-size: 14px;">
+              <span class="text-muted">Color family</span> <span class="text-dark fw-medium ms-2">Multicolor</span>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="border-color: #f57224; color: #000;">Multicolor</button>
+              </div>
+            </div>
+
+            <!-- Quantity Selector -->
+            <div class="d-flex align-items-center gap-3 my-4">
+              <span class="text-muted" style="font-size: 14px;">Quantity:</span>
+              <div class="input-group input-group-sm" style="width: 110px;">
+                <button class="btn btn-light border" type="button" id="minusBtn" style="background-color: #fafafa;">—</button>
+                <input type="text" class="form-control text-center bg-white border" value="1" id="qtyInput" readonly />
+                <button class="btn btn-light border" type="button" id="plusBtn" style="background-color: #fafafa;">+</button>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3 mt-4">
+              <button class="btn text-white px-4 py-2 w-50 fw-medium fs-5" style="background-color: #26abd4; border:none; border-radius: 2px;">Buy Now</button>
+              <button class="btn text-white px-4 py-2 w-50 fw-medium fs-5" style="background-color: #f57224; border:none; border-radius: 2px;">Add to Cart</button>
+            </div>
+          </div>
+
         </div>
+      </div> 
+      
+      <!-- Right Column: Shipping & Seller Metrics -->
+      <div class="col-12 col-lg-4">
+        <div class="card p-3 bg-light-subtle border border-light-dark rounded-0 shadow-sm mb-3" style="font-size: 13px;">
+          <div class="d-flex justify-content-between text-secondary mb-3" style="font-size: 12px;">
+            <span>Delivery Options</span>
+            <span role="button" id="infoDelivery" class="text-muted">ⓘ</span>
+          </div>
+
+          <div class="d-flex align-items-start mb-3">
+            <span class="me-2 fs-5 text-secondary"><i class="bi bi-geo-alt"></i></span>
+            <div class="flex-grow-1">
+              <p class="m-0 text-dark lh-sm" id="deliveryAddress">Bagmati, Kathmandu Metro 22 - Newroad Area, Newroad</p>
+            </div>
+            <a href="#" class="text-decoration-none fw-semibold ms-2 text-primary" id="changeLocationBtn" style="font-size: 12px;">CHANGE</a>
+          </div>
+
+          <div class="d-flex align-items-start mb-3">
+            <span class="me-2 fs-5 text-secondary"><i class="bi bi-truck"></i></span>
+            <div class="flex-grow-1">
+              <p class="m-0 text-dark lh-sm fw-medium">Standard Delivery</p>
+              <p class="m-0 text-muted" style="font-size: 11px;">{{ product.delivery_days }}</p>
+            </div>
+            <span class="fw-bold text-dark">Rs. {{ product.delivery_charge }}</span>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 {% if not product.cash_on_delivery %}opacity-50{% endif %}">
+            <span class="me-2 fs-5 text-secondary"><i class="bi bi-cash-coin"></i></span>
+            <div class="flex-grow-1">
+              <p class="m-0 text-dark lh-sm">
+                {% if product.cash_on_delivery %}
+                  Cash on Delivery Available
+                {% else %}
+                  Cash on Delivery Not Available
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          <hr class="my-3 text-muted" />
+
+          <div class="d-flex justify-content-between text-secondary mb-3" style="font-size: 12px;">
+            <span>Return & Warranty</span>
+            <span role="button" id="infoWarranty" class="text-muted">ⓘ</span>
+          </div>
+
+          <div class="d-flex align-items-start mb-3 {% if not product.change_of_mind %}opacity-50{% endif %}">
+            <span class="me-2 fs-5 text-secondary"><i class="bi bi-arrow-counterclockwise"></i></span>
+            <div class="flex-grow-1">
+              <p class="m-0 text-dark lh-sm">
+                {% if product.change_of_mind %}
+                  Change of Mind Available
+                {% else %}
+                  Change of Mind Not Applicable
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-3">
+            <span class="me-2 fs-5 text-secondary"><i class="bi bi-shield-check"></i></span>
+            <div class="flex-grow-1">
+              <p class="m-0 text-dark lh-sm">{{ product.return_days }} Days Free Returns</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start {% if not product.warranty_available %}text-muted opacity-50{% endif %} mb-3">
+            <span class="me-2 fs-5 text-secondary"><i class="bi bi-shield-x"></i></span>
+            <div class="flex-grow-1">
+              <p class="m-0 lh-sm">
+                {% if product.warranty_available %}
+                  {{ product.warranty_info }}
+                {% else %}
+                  Warranty not available
+                {% endif %}
+              </p>
+            </div>
+          </div>
+
+          <hr class="my-3 text-muted" />
+
+          <!-- App Promo Scan Box -->
+          <div class="d-flex align-items-center bg-white p-2 border rounded-1">
+            <div class="text-center me-2">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=75x75&data=https://www.daraz.com" alt="QR Code" style="width: 100px; height: 100px;" />
+              <div class="text-muted mt-1" style="font-size: 11px;">
+                <i class="bi bi-phone"></i> Scan with mobile
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center bg-light p-2 rounded border border-light-dark flex-grow-1" style="height: 75px;">
+              <div class="d-flex flex-column align-items-center justify-content-center rounded-3 me-2 flex-shrink-0" style="width: 75px; height: 75px; background-color: #f57224; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s ease-in-out;">
+                <i class="bi bi-bag-fill text-white mb-1" style="font-size: 32px; line-height: 1;"></i>
+                <span class="text-white fw-bold text-center" style="font-size: 11px; letter-spacing: 0.3px; line-height: 1.1;">DARAZ<br />APP</span>
+              </div>
+              <div style="font-size: 11px; line-height: 1.2; cursor: pointer; transition: all 0.2s ease-in-out;" class="text-secondary">Download app to enjoy exclusive discounts!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seller Info Card -->
+        <div class="card p-3 bg-white border border-light-dark rounded-0 shadow-sm" style="font-size: 13px;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <span class="text-muted d-block" style="font-size: 11px;">Sold by</span>
+              <span class="fw-normal text-dark fs-6">{{ product.seller_name|default:'EOrison' }}</span>
+            </div>
+            <a href="#" class="text-decoration-none fw-semibold text-primary"><i class="bi bi-chat-dots-fill me-1"></i> Chat</a>
+          </div>
+
+          <div class="row text-center bg-light g-0 border-top border-bottom py-2 my-2">
+            <div class="col-4 border-end d-flex flex-column justify-content-center px-1">
+              <span class="text-muted d-block lh-sm" style="font-size: 11px;">Positive Seller Ratings</span>
+              <span class="fs-4 text-dark d-block pt-1 fw-normal">
+                {% if product.positive_seller_ratings %}
+                  {{ product.positive_seller_ratings }}%
+                {% else %}
+                  <span class="fs-6 text-muted">Not enough data</span>
+                {% endif %}
+              </span>
+            </div>
+            <div class="col-4 border-end d-flex flex-column justify-content-center px-1">
+              <span class="text-muted d-block lh-sm" style="font-size: 11px;">Ship on Time</span>
+              <span class="fs-4 text-dark d-block pt-1 fw-normal">
+                {% if product.ship_on_time %}
+                  {{ product.ship_on_time }}%
+                {% else %}
+                  <span class="fs-6 text-muted">Not enough data</span>
+                {% endif %}
+              </span>
+            </div>
+            <div class="col-4 d-flex flex-column justify-content-center px-1">
+              <span class="text-muted d-block lh-sm" style="font-size: 11px;">Chat Response Rate</span>
+              <span class="text-dark d-block pt-1 fw-normal">
+                {% if product.chat_response_rate %}
+                  {{ product.chat_response_rate }}
+                {% else %}
+                  <span class="fs-6 text-muted" style="font-size: 11px;">Not enough data</span>
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+          <div class="text-center pt-2">
+            <a href="#" class="text-decoration-none fw-bold text-primary small tracking-wide">GO TO STORE</a>
+          </div>
+        </div>
+      </div>
 
     </div>
-</div>
+  </div> 
+
+  <!-- Lower Tabs Section: Description & Reviews -->
+  <div class="container my-5">
+    <div class="card shadow-sm border-light-dark rounded-3 overflow-hidden">
+      <div class="card-header bg-light p-0 border-bottom">
+        <ul class="nav nav-tabs border-0" id="productTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold px-4 py-3 text-uppercase border-0 rounded-0" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc-content" type="button" role="tab" aria-controls="desc-content" aria-selected="true" style="color: #f57224;">Description & Specs</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold px-4 py-3 text-uppercase border-0 rounded-0 text-muted" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-content" type="button" role="tab" aria-controls="reviews-content" aria-selected="false">Ratings & Reviews ({{ product.total_ratings|default:'0' }})</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card-body p-4 bg-white">
+        <div class="tab-content" id="productTabContent">
+          
+          <!-- Tab 1: Description -->
+          <div class="tab-pane fade show active" id="desc-content" role="tabpanel" aria-labelledby="desc-tab">
+            <h4 class="fs-5 fw-bold text-dark mb-3">Product Description</h4>
+            <div class="text-secondary lh-lg mb-4" style="font-size: 15px;">{{ product.description|linebreaks }}</div>
+
+            <hr class="text-black-50 my-4" />
+
+            <h4 class="fs-5 fw-bold text-dark mb-3">Specifications</h4>
+            <div class="row g-3">
+              <div class="col-6 col-md-4">
+                <span class="text-muted d-block small">Brand</span>
+                <span class="text-dark fw-medium">{{ product.brand_name|default:'No Brand' }}</span>
+              </div>
+              <div class="col-6 col-md-4">
+                <span class="text-muted d-block small">Item Form</span>
+                <span class="text-dark fw-medium">
+                  {{ product.item_form|default:'Solid' }}
+                  <span class="text-muted small">({{ product.total_similar_form_items }} items)</span>
+                </span>
+              </div> 
+              <div class="col-6 col-md-4">
+                <span class="text-muted d-block small">Warranty Status</span>
+                <span class="text-dark fw-medium">
+                  {% if product.warranty_available %}
+                    {{ product.warranty_info }}
+                  {% else %}
+                    No Warranty Available
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Reviews and Progress Bars -->
+          <div class="tab-pane fade" id="reviews-content" role="tabpanel" aria-labelledby="reviews-tab">
+            <div class="row g-4 align-items-center mb-4">
+              <div class="col-md-4 text-center border-end py-2">
+                <h2 class="display-4 fw-bold m-0 text-dark">{{ product.rating|default:'0.0' }}<span class="fs-4 text-muted">/5</span></h2>
+                <div class="text-warning my-2" style="font-size: 18px;">
+                  {% if product.rating >= 4.5 %}
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                  {% elif product.rating >= 4 %}
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+                  {% else %}
+                    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i><i class="bi bi-star"></i>
+                  {% endif %}
+                </div>
+                <p class="text-muted small m-0">{{ product.total_ratings|default:'0' }} Ratings</p>
+              </div>
+
+              <!-- Star Breakdown Progress Bars -->
+              <div class="col-md-8">
+                <div class="d-flex align-items-center mb-1 small text-muted">
+                  <span style="width: 50px;">5 Star</span>
+                  <div class="progress flex-grow-1 mx-2" style="height: 8px;">
+                    <div class="progress-bar bg-warning" style="width: {{ product.star_breakdown.five|default:'0' }}%"></div>
+                  </div>
+                  <span style="width: 30px;">{{ product.star_breakdown.five|default:'0' }}%</span>
+                </div>
+
+                <div class="d-flex align-items-center mb-1 small text-muted">
+                  <span style="width: 50px;">4 Star</span>
+                  <div class="progress flex-grow-1 mx-2" style="height: 8px;">
+                    <div class="progress-bar bg-warning" style="width: {{ product.star_breakdown.four|default:'0' }}%"></div>
+                  </div>
+                  <span style="width: 30px;">{{ product.star_breakdown.four|default:'0' }}%</span>
+                </div>
+
+                <div class="d-flex align-items-center small text-muted">
+                  <span style="width: 50px;">3 Star</span>
+                  <div class="progress flex-grow-1 mx-2" style="height: 8px;">
+                    <div class="progress-bar bg-warning" style="width: {{ product.star_breakdown.three|default:'0' }}%"></div>
+                  </div>
+                  <span style="width: 30px;">{{ product.star_breakdown.three|default:'0' }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <hr class="text-black-50 my-4" />
+
+            <!-- Individual Customer Reviews List -->
+            {% for review in product.reviews.all %}
+              <div class="review-item py-3 border-bottom {% if not forloop.last %}mb-3{% endif %}">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <div>
+                    <div class="text-warning small mb-1">
+                      {% if review.rating >= 1 %}<i class="bi bi-star-fill"></i>{% endif %}
+                      {% if review.rating >= 2 %}<i class="bi bi-star-fill"></i>{% endif %}
+                      {% if review.rating >= 3 %}<i class="bi bi-star-fill"></i>{% endif %}
+                      {% if review.rating >= 4 %}<i class="bi bi-star-fill"></i>{% endif %}
+                      {% if review.rating >= 5 %}<i class="bi bi-star-fill"></i>{% endif %}
+                    </div>
+                    <span class="fw-semibold small text-dark">{{ review.user_name }}</span>
+                    <span class="badge bg-success-subtle text-success ms-2 rounded-pill fw-medium" style="font-size: 10px;">
+                      <i class="bi bi-check-circle-fill me-1"></i>Verified Purchase
+                    </span>
+                  </div>
+                  <span class="text-muted small">{{ review.created_at|date:'d M Y' }}</span>
+                </div>
+
+                <p class="text-dark small mb-2">{{ review.comment }}</p>
+
+                {% if review.color_family %}
+                  <span class="text-muted d-block small mb-3">Color family: {{ review.color_family }}</span>
+                {% endif %}
+
+                {% if review.seller_response %}
+                  <div class="bg-light p-3 rounded border-start border-warning border-3 ms-3 mt-2">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <i class="bi bi-shop text-warning fs-6"></i>
+                      <span class="fw-bold text-dark small">Seller Response</span>
+                      <span class="text-muted" style="font-size: 11px;">- {{ review.seller_response_time }}</span>
+                    </div>
+                    <p class="text-secondary small m-0">{{ review.seller_response }}</p>
+                  </div>
+                {% endif %}
+              </div>
+            {% empty %}
+              <div class="text-center py-5 text-muted">
+                <i class="bi bi-chat-left-text fs-2 mb-2 d-block text-black-50"></i>
+                <span class="small">No reviews yet for this product. Be the first to share your experience!</span>
+              </div>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
