@@ -1,93 +1,102 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <!-- Meta -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daraz Clone</title>
 
     <!-- Bootstrap CSS -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Bootstrap Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'css/slider.css' %}">
-    <link rel="stylesheet" href="{% static 'css/product_list.css' %}">
-    <link rel="stylesheet" href="{% static 'css/product_details.css' %}">
-</head>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/slider.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/product_list.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/product_details.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/register_user.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/carts.css' %}" />
+    <link rel="stylesheet" href="{% static "css/checkout.css" %}" />
+    <link rel="stylesheet" href="{% static "css/order_checkout.css" %}" />
 
-<body>
 
+
+  </head>
+
+  <body>
     <!-- Navbar -->
     <nav class="bg-daraz">
-        <div class="container">
+      <div class="container">
+        <!-- Top Links -->
+        <div class="d-flex justify-content-end flex-wrap gap-4 py-2">
+          <a href="#" class="top-nav-link">SAVE MORE ON APP</a>
+          <a href="#" class="top-nav-link">BECOME A SELLER</a>
+          <a href="#" class="top-nav-link">HELP & SUPPORT</a>
 
-            <!-- Top Links -->
-            <div class="d-flex justify-content-end flex-wrap gap-4 py-2">
-                <a href="#" class="top-nav-link">SAVE MORE ON APP</a>
-                <a href="#" class="top-nav-link">BECOME A SELLER</a>
-                <a href="#" class="top-nav-link">HELP & SUPPORT</a>
-                <a href="#" class="top-nav-link">LOGIN</a>
-                <a href="#" class="top-nav-link">SIGN UP</a>
-                <a href="#" class="top-nav-link">भाषा परिवर्तन</a>
-            </div>
+          {% if user.is_authenticated %}
+            <!-- user is login then show user name -->
+            <a href="" style="text-decoration: none;"><span class="top-nav-link" style="font-weight: bold; color: white;font-size: 1rem;">Well Come, {{ user.username|capfirst }}</span></a>
 
-            <!-- Logo, Search, Cart -->
-            <div class="row align-items-center g-3 pb-2">
-
-                <!-- Logo -->
-                <div class="col-lg-2 col-md-3 col-4">
-                    <a href="/" class="navbar-brand m-0">
-                        <img
-                            src="{% static 'images/logo1.png' %}"
-                            alt="Logo"
-                            class="img-fluid logo-img">
-                    </a>
-                </div>
-
-                <!-- Search -->
-                <div class="col-lg-9 col-md-8 col-6 d-flex flex-column">
-                    <div class="input-group">
-                        <input
-                            type="text"
-                            class="form-control search-box"
-                            placeholder="Search in Daraz">
-
-                        <button class="search-btn">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-
-                    {% block search_tags %}
-                    {% endblock %}
-                </div>
-
-                <!-- Cart -->
-                <div class="col-lg-1 col-md-1 col-2 text-end">
-                    <i class="bi bi-cart2 cart-icon"></i>
-                </div>
-
-            </div>
+            <!-- user logout option avlable -->
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="top-nav-link" style="background: none; border: none; cursor: pointer; color: white;">LOGOUT</button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}" class="top-nav-link">LOGIN</a>
+            <a href="{% url 'register' %}" class="top-nav-link">SIGN UP</a>
+          {% endif %}
+          <a href="#" class="top-nav-link">भाषा परिवर्तन</a>
         </div>
+
+        <!-- Logo, Search, Cart -->
+        <div class="row align-items-center g-3 pb-2">
+          <!-- Logo -->
+          <div class="col-lg-2 col-md-3 col-4">
+            <a href="/" class="navbar-brand m-0"><img src="{% static 'images/logo1.png' %}" alt="Logo" class="img-fluid logo-img" /></a>
+          </div>
+
+          <!-- Search -->
+          <div class="col-lg-9 col-md-8 col-6 d-flex flex-column">
+            <div class="input-group">
+              <input type="text" class="form-control search-box" placeholder="Search in Daraz" />
+
+              <button class="search-btn"><i class="bi bi-search"></i></button>
+            </div>
+
+            {% block search_tags %}
+
+            {% endblock %}
+          </div>
+
+          <!-- Cart -->
+          <div class="col-lg-1 col-md-1 col-2 text-end">
+            <a href="{% url 'cart_view' %}" class="position-relative text-white">
+              <i class="bi bi-cart3 fs-3"></i>
+
+              {% if cart_count %}
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ cart_count }}</span>
+              {% endif %}
+            </a>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <!-- Breadcrumb -->
     {% block breadcrumbs %}
+
     {% endblock %}
 
     <!-- Page Content -->
     <main class="main-body-content">
-        {% block content %}
-        {% endblock %}
+      {% block content %}
+
+      {% endblock %}
     </main>
 
     <!-- Bootstrap JS -->
@@ -97,10 +106,11 @@
     <script src="{% static 'js/base.js' %}"></script>
     <script src="{% static 'js/slider.js' %}"></script>
     <script src="{% static 'js/product_details.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
     <script src="{% static 'js/time.js' %}"></script>
+    <script src="{% static 'js/checkout.js' %}"></script>
+    <script src="{% static 'js/user_register.js' %}"></script>
+    <script src="{% static 'js/carts.js' %}"></script>
 
-
-
-</body>
-
+  </body>
 </html>

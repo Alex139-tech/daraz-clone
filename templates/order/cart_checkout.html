@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container py-4">
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="row g-4">
+        <!-- ================= LEFT SIDE ================= -->
+
+        <div class="col-lg-8">
+          <!-- ================= ADDRESS ================= -->
+
+          <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+              <h5 class="fw-bold mb-0">
+                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+
+                Delivery Address
+              </h5>
+
+              {% if shipping_address %}
+                <a href="{% url 'add_address' %}" class="btn btn-outline-primary btn-sm">Change</a>
+              {% endif %}
+            </div>
+
+            <div class="card-body">
+              {% if shipping_address %}
+                <div class="bg-light rounded p-3">
+                  <h5 class="fw-bold">{{ shipping_address.full_name }}</h5>
+
+                  <p class="mb-2">
+                    <i class="bi bi-telephone-fill me-2"></i>
+
+                    {{ shipping_address.phone_number }}
+                  </p>
+
+                  <p class="text-muted mb-0">{{ shipping_address.address }},
+
+                    {{ shipping_address.city }},
+
+                    {{ shipping_address.province }},
+
+                    {{ shipping_address.postal_code }}</p>
+                </div>
+              {% else %}
+                <div class="text-center py-4">
+                  <i class="bi bi-geo-alt display-3 text-secondary"></i>
+
+                  <h5 class="mt-3">No Delivery Address</h5>
+
+                  <p class="text-muted">Please add your delivery address.</p>
+
+                  <a href="{% url 'add_address' %}" class="btn btn-primary">Add Address</a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- ================= PRODUCTS ================= -->
+
+          <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white py-3">
+              <h5 class="fw-bold mb-0">
+                <i class="bi bi-bag-fill text-warning me-2"></i>
+
+                Cart Products
+              </h5>
+            </div>
+
+            <div class="card-body">
+              {% for item in cart_items %}
+                <div class="row align-items-center py-3 {% if not forloop.last %}border-bottom{% endif %}">
+                  <div class="col-md-2 text-center">
+                    <img src="{{ item.product.image.url }}" class="img-fluid rounded border" alt="{{ item.product.title }}" />
+                  </div>
+
+                  <div class="col-md-5">
+                    <h6 class="fw-bold">{{ item.product.title }}</h6>
+
+                    <p class="text-muted small mb-2">Brand :
+
+                      {{ item.product.brand_name }}</p>
+
+                    {% if item.product.is_on_sale %}
+                      <span class="badge bg-danger">{{ item.product.discount_percentage }}% OFF</span>
+                    {% endif %}
+
+                    {% if item.product.cash_on_delivery %}
+                      <span class="badge bg-success">Cash On Delivery</span>
+                    {% endif %}
+                  </div>
+
+                  <div class="col-md-2 text-center">
+                    <strong>Qty : {{ item.quantity }}</strong>
+                  </div>
+
+                  <div class="text-success">Stock : {{ product.stock }}</div>
+
+                  <div class="col-md-3 text-end">
+                    <div class="fw-bold text-danger fs-5">Rs. {{ item.current_price }}</div>
+
+                    {% if item.original_price != item.current_price %}
+                      <small class="text-decoration-line-through text-muted">Rs. {{ item.original_price }}</small>
+                    {% endif %}
+
+                    <div class="mt-2">
+                      <strong>
+                        Total :
+
+                        Rs. {{ item.total_price }}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              {% empty %}
+                <div class="text-center py-5">
+                  <i class="bi bi-cart-x display-4 text-secondary"></i>
+
+                  <h5 class="mt-3">Your cart is empty.</h5>
+
+                  <a href="{% url 'product_list' %}" class="btn btn-warning mt-3">Continue Shopping</a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <!-- ================= RIGHT SIDE ================= -->
+
+        <div class="col-lg-4">
+          <!-- PAYMENT METHOD -->
+
+          <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white py-3">
+              <h5 class="fw-bold mb-0">
+                <i class="bi bi-credit-card me-2 text-primary"></i>
+
+                Payment Method
+              </h5>
+            </div>
+
+            <div class="card-body">
+              <div class="form-check border rounded p-3 mb-3">
+                <input checked class="form-check-input" type="radio" name="payment_method" value="COD" id="cod" />
+
+                <label class="form-check-label ms-2" for="cod">Cash On Delivery</label>
+              </div>
+
+              <div class="form-check border rounded p-3 mb-3">
+                <input class="form-check-input" type="radio" name="payment_method" value="ESEWA" id="esewa" />
+
+                <label class="form-check-label ms-2" for="esewa">eSewa</label>
+              </div>
+
+              <div class="form-check border rounded p-3 mb-3">
+                <input class="form-check-input" type="radio" name="payment_method" value="KHALTI" id="khalti" />
+
+                <label class="form-check-label ms-2" for="khalti">Khalti</label>
+              </div>
+
+              <div class="form-check border rounded p-3">
+                <input class="form-check-input" type="radio" name="payment_method" value="IME" id="ime" />
+
+                <label class="form-check-label ms-2" for="ime">IME Pay</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- ORDER NOTE -->
+
+          <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-header bg-white py-3">
+              <h5 class="fw-bold mb-0">Order Note</h5>
+            </div>
+
+            <div class="card-body">
+              <textarea name="order_note" rows="4" class="form-control" placeholder="Write a note for seller (Optional)"></textarea>
+            </div>
+          </div>
+
+          <!-- ORDER SUMMARY -->
+
+          <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-header bg-white py-3">
+              <h5 class="fw-bold mb-0">Order Summary</h5>
+            </div>
+
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-3">
+                <span>Subtotal</span>
+
+                <strong>Rs. {{ subtotal }}</strong>
+              </div>
+
+              <div class="d-flex justify-content-between mb-3">
+                <span>Shipping</span>
+
+                <strong>Rs. {{ shipping }}</strong>
+              </div>
+
+              <div class="d-flex justify-content-between mb-3 text-success">
+                <span>Voucher Discount</span>
+
+                <strong>- Rs. {{ discount }}</strong>
+              </div>
+
+              <hr />
+
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0">Total</h4>
+
+                <h3 class="text-danger fw-bold mb-0">Rs. {{ total }}</h3>
+              </div>
+
+              <button type="submit" class="btn btn-lg w-100 text-white fw-bold" style="background:#f57224;">PLACE ORDER</button>
+
+              <div class="mt-4">
+                <div class="small text-success mb-2">✓ Secure Checkout</div>
+
+                <div class="small text-success mb-2">✓ 100% Buyer Protection</div>
+
+                <div class="small text-success">✓ Cash On Delivery Available</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

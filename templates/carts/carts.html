@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container py-4">
+    <div class="row">
+      <!-- ================= LEFT SIDE ================= -->
+
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+          <!-- Header -->
+
+          <div class="card-header bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="selectAll" checked />
+
+                <label class="form-check-label fw-bold" for="selectAll">SELECT ALL (<span id="selected-count-header">0</span>)</label>
+              </div>
+
+              <button class="btn btn-sm btn-link text-danger" id="deleteSelected">
+                <i class="bi bi-trash"></i>
+
+                Delete
+              </button>
+            </div>
+          </div>
+
+          <!-- Body -->
+
+          <div class="card-body p-0">
+            {% if cart_items %}
+              {% for item in cart_items %}
+                <div class="cart-item border-bottom p-3" data-product="{{ item.product.id }}" data-price="{{ item.current_price }}" data-quantity="{{ item.quantity }}">
+                  <div class="row align-items-center">
+                    <!-- Checkbox -->
+
+                    <div class="col-auto">
+                      <input class="form-check-input item-checkbox" type="checkbox" checked />
+                    </div>
+
+                    <!-- Image -->
+
+                    <div class="col-md-2">
+                      {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" class="img-fluid rounded border" />
+                      {% endif %}
+                    </div>
+
+                    <!-- Product -->
+
+                    <div class="col-md-4">
+                      <h6 class="fw-bold mb-2">{{ item.product.title }}</h6>
+
+                      <small class="text-muted">{{ item.product.brand_name }}</small>
+
+                      <div class="mt-3">
+                        <a href="#" class="text-decoration-none me-3"><i class="bi bi-heart"></i></a>
+
+                        <a href="{% url 'remove_from_cart' item.product.id %}" class="text-decoration-none text-danger remove-item-btn"><i class="bi bi-trash"></i></a>
+                      </div>
+                    </div>
+
+                    <!-- Price -->
+
+                    <div class="col-md-2 text-center">
+                      <div class="fw-bold text-danger">Rs.
+
+                        {{ item.current_price }}</div>
+
+                      <small class="text-decoration-line-through text-muted">
+                        Rs.
+
+                        {{ item.original_price }}
+                      </small>
+                    </div>
+
+                    <!-- Quantity -->
+
+                    <div class="col-md-2">
+                      <div class="input-group">
+                        <a href="{% url 'decrease_quantity' item.product.id %}" class="btn btn-outline-secondary btn-minus">-</a>
+
+                        <input type="text" value="{{ item.quantity }}" class="form-control text-center quantity" readonly />
+
+                        <a href="{% url 'increase_quantity' item.product.id %}" class="btn btn-outline-secondary">+</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+              <div class="text-center py-5">
+                <h5>Your cart is empty.</h5>
+
+                <a href="{% url 'product_list' %}" class="btn btn-warning mt-3">Continue Shopping</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RIGHT SIDE ================= -->
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm cart-summary sticky-top">
+          <div class="card-body">
+            <h5 class="fw-bold mb-4">Order Summary</h5>
+
+            <!-- Subtotal -->
+
+            <div class="d-flex justify-content-between mb-3">
+              <span>
+                Subtotal
+
+                (<span id="total-items">0</span> items)
+              </span>
+
+              <strong>
+                Rs.
+                <span id="subtotal-val">0.00</span>
+              </strong>
+            </div>
+
+            <!-- Shipping -->
+
+            <div class="d-flex justify-content-between mb-3">
+              <span>Shipping</span>
+
+              <strong>
+                Rs.
+
+                <span id="shipping-val">390.00</span>
+              </strong>
+            </div>
+
+            <!-- Discount -->
+
+            <div id="discount-row" class="d-flex justify-content-between mb-3 text-success d-none">
+              <span>Voucher</span>
+
+              <strong>
+                -
+
+                Rs.
+
+                <span id="discount-val">0.00</span>
+              </strong>
+            </div>
+
+            <hr />
+
+            <!-- Voucher -->
+
+            <div class="input-group mb-4">
+              <input type="text" class="form-control" placeholder="Voucher Code" id="voucherCode" />
+
+              <button class="btn btn-info text-white" id="applyVoucher">Apply</button>
+            </div>
+
+            <!-- Grand Total -->
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>Total</h5>
+
+              <h4 class="text-danger">
+                Rs.
+
+                <span id="grand-total-val">0.00</span>
+              </h4>
+            </div>
+
+            <!-- Checkout -->
+            <a href="{% url 'cart_checkout' %}" class="btn btn-lg btn-warning w-100">Proceed To Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     user_name = models.CharField(max_length=100, default="Anonymous")
+    image = models.ImageField(upload_to='review_images/', blank=True, null=True)
     rating = models.FloatField(default=5.0)
     comment = models.TextField()
     color_family = models.CharField(max_length=50, blank=True, null=True, default="Standard")

@@ -1,0 +1,14 @@
+.message-container{
+    position: fixed;
+    top: 80px;          /* Navbar ke niche */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 450px;
+    max-width: 90%;
+    z-index: 1055;      /* Bootstrap modal se kam, navbar se upar */
+}
+
+.message-container .alert{
+    margin-bottom: 10px;
+    border-radius: 8px;
+}

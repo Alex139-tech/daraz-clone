@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 from .models import Product, Category
+from accounts.models import Customer
 
 
 def home(request):
@@ -49,3 +52,20 @@ def product_list(request):
     """
     products = Product.objects.all().order_by('-created_at')
     return render(request, 'product_list.html', {'products': products})
+
+
+# like and share view
+@login_required
+def toggle_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    customer, created = Customer.objects.get_or_create(
+        user=request.user
+    )
+
+    if product in customer.wishlist.all():
+        customer.wishlist.remove(product)
+    else:
+        customer.wishlist.add(product)
+
+    return redirect(request.META.get("HTTP_REFERER", "/"))

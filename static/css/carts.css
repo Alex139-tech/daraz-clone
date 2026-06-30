@@ -1,0 +1,212 @@
+/* ==========================================
+   CART PAGE
+========================================== */
+
+body{
+    background:#f5f5f5;
+}
+
+/* Card */
+
+.card{
+    border:none;
+    border-radius:10px;
+}
+
+
+/* ===========================
+   Cart Item
+=========================== */
+
+.cart-item{
+
+    transition:.3s;
+
+    background:#fff;
+
+}
+
+.cart-item:hover{
+
+    background:#fafafa;
+
+}
+
+
+/* ===========================
+   Product Image
+=========================== */
+
+.cart-item img{
+
+    width:90px;
+
+    height:90px;
+
+    object-fit:cover;
+
+}
+
+
+/* ===========================
+   Product Title
+=========================== */
+
+.cart-item h6{
+
+    font-size:16px;
+
+    line-height:1.5;
+
+}
+
+
+/* ===========================
+   Price
+=========================== */
+
+.text-danger{
+
+    color:#f57224 !important;
+
+}
+
+
+/* ===========================
+   Quantity
+=========================== */
+
+.quantity{
+
+    background:#fff;
+
+    font-weight:bold;
+
+}
+
+
+/* ===========================
+   Delete + Wishlist
+=========================== */
+
+.cart-item a{
+
+    transition:.3s;
+
+}
+
+.cart-item a:hover{
+
+    color:#f57224 !important;
+
+}
+
+
+/* ===========================
+   Summary
+=========================== */
+
+.cart-summary{
+
+    top:25px;
+
+}
+
+
+/* ===========================
+   Checkout Button
+=========================== */
+
+.btn-warning{
+
+    background:#f57224;
+
+    border:none;
+
+    color:#fff;
+
+}
+
+.btn-warning:hover{
+
+    background:#dd661c;
+
+}
+
+
+/* ===========================
+   Voucher Button
+=========================== */
+
+#applyVoucher{
+
+    background:#199cdb;
+
+    color:#fff;
+
+}
+
+#applyVoucher:hover{
+
+    background:#1284ba;
+
+}
+
+
+/* ===========================
+   Checkbox
+=========================== */
+
+.form-check-input{
+
+    cursor:pointer;
+
+}
+
+
+/* ===========================
+   Empty Cart
+=========================== */
+
+.empty-cart{
+
+    padding:80px;
+
+    text-align:center;
+
+}
+
+
+/* ===========================
+   Mobile
+=========================== */
+
+@media(max-width:992px){
+
+.cart-summary{
+
+position:relative !important;
+
+top:0;
+
+margin-top:20px;
+
+}
+
+}
+
+
+@media(max-width:768px){
+
+.cart-item .row{
+
+text-align:center;
+
+}
+
+.cart-item img{
+
+margin-bottom:15px;
+
+}
+}

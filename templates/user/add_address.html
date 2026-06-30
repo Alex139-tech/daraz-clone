@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow border-0 rounded-4">
+          <div class="card-header bg-white py-3">
+            <h4 class="fw-bold mb-0">
+              {% if address %}
+                Update Delivery Address
+              {% else %}
+                Add Delivery Address
+              {% endif %}
+            </h4>
+          </div>
+
+          <div class="card-body p-4">
+            <form method="POST">
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Full Name</label>
+                <input type="text" name="full_name" class="form-control" placeholder="Enter Full Name" value="{{ address.full_name|default:'' }}" required />
+              </div>
+
+              <label class="form-label fw-semibold">Phone Number</label>
+
+              <input type="text" name="phone_number" class="form-control" value="{{ request.user.customer.phone_number }}" required /> <div class="mb-3">
+                <label class="form-label fw-semibold">Address</label>
+                <textarea name="address" rows="3" class="form-control" placeholder="Enter Full Address" required>{{ address.address|default:'' }}</textarea>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold">City</label>
+                  <input type="text" name="city" class="form-control" placeholder="Enter City" value="{{ address.city|default:'' }}" required />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label fw-semibold">Province</label>
+                  <input type="text" name="province" class="form-control" placeholder="Enter Province" value="{{ address.province|default:'' }}" required />
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Postal Code</label>
+                <input type="text" name="postal_code" class="form-control" placeholder="Enter Postal Code" value="{{ address.postal_code|default:'' }}" required />
+              </div>
+
+              <button type="submit" class="btn btn-lg w-100 text-white" style="background:#f57224;">
+                {% if address %}
+                  Update Address
+                {% else %}
+                  Save Address
+                {% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

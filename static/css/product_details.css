@@ -39,3 +39,9 @@
   .nav-tabs .nav-link:hover {
     color: #f57224 !important;
   }
+
+
+.thumbnail-btn.active {
+    border-color: #f57224 !important; /* Daraz Orange Color */
+    box-shadow: 0 0 4px rgba(245, 114, 36, 0.5);
+}

@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.db.models import Avg
 
@@ -43,9 +44,10 @@ class Product(models.Model):
     title = models.CharField(max_length=200)
     brand_name = models.CharField(max_length=100, default="No Brand", blank=True, null=True)
     image = models.ImageField(upload_to='products/')
+
     description = models.TextField()
-    current_price = models.IntegerField()
-    original_price = models.IntegerField()
+    current_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_on_sale = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -133,10 +135,45 @@ class Voucher(models.Model):
     Model representing dynamic discount coupons/vouchers that can be 
     linked to specific products (e.g., Rs. 50 OFF, 10% OFF).
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='vouchers')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_vouchers')
     discount_title = models.CharField(max_length=50, help_text="e.g., Rs. 50 OFF or 10% OFF")
-    min_spend = models.IntegerField(default=0) 
+    min_spend = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_active = models.BooleanField(default=True)
+    
 
     def __str__(self):
         return f"{self.discount_title} for {self.product.title}"
+    
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='products/gallery/')
+
+    def __str__(self):
+        return f"Gallery Image for {self.product.title}"
+
+
+
+# this is my inventory
+class Stock(models.Model):
+
+    product = models.OneToOneField(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="stock"
+    )
+
+    quantity = models.PositiveIntegerField(
+        default=0
+    )
+
+    low_stock_alert = models.PositiveIntegerField(
+        default=5
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return f"{self.product.title} - {self.quantity}"

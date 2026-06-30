@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Voucher
+from .models import Product, Category, Voucher, ProductImage
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -10,17 +10,25 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 4 
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     """
     Admin configuration for Products with organized fieldsets for easier data entry.
     """
+    inlines = [ProductImageInline]
+
     # Columns to display in the admin list view
     list_display = (
         'title', 
         'category',
         'current_price', 
         'original_price', 
+        'stock',
         'get_discount_percentage',
         'is_on_sale', 
         'created_at'
