@@ -20,11 +20,8 @@
     <link rel="stylesheet" href="{% static 'css/register_user.css' %}" />
     <link rel="stylesheet" href="{% static 'css/cart.css' %}" />
     <link rel="stylesheet" href="{% static 'css/carts.css' %}" />
-    <link rel="stylesheet" href="{% static "css/checkout.css" %}" />
-    <link rel="stylesheet" href="{% static "css/order_checkout.css" %}" />
-
-
-
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/order_checkout.css' %}" />
   </head>
 
   <body>
@@ -74,12 +71,17 @@
           </div>
 
           <!-- Cart -->
-          <div class="col-lg-1 col-md-1 col-2 text-end">
-            <a href="{% url 'cart_view' %}" class="position-relative text-white">
-              <i class="bi bi-cart3 fs-3"></i>
+          <div class="col-lg-1 col-md-2 col-3 text-end d-flex align-items-center justify-content-end">
+            <a href="{% url 'cart_view' %}" class="position-relative text-white d-inline-block text-decoration-none">
+              <!-- कार्ट का बड़ा और साफ़ आइकॉन -->
+              <i class="bi bi-cart3 fs-2 text-white"></i>
 
+              <!-- कार्ट काउंट का बैज (यदि आइटम मौजूद हैं) -->
               {% if cart_count %}
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ cart_count }}</span>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" style="font-size: 0.75rem; padding: 0.35em 0.65em;">
+                  {{ cart_count }}
+                  <span class="visually-hidden">unread messages</span>
+                </span>
               {% endif %}
             </a>
           </div>
@@ -111,6 +113,10 @@
     <script src="{% static 'js/checkout.js' %}"></script>
     <script src="{% static 'js/user_register.js' %}"></script>
     <script src="{% static 'js/carts.js' %}"></script>
+    <script src="{% static 'js/payment.js' %}"></script>
+    <script src="{% static 'js/single_product.js' %}"></script>
+
+
 
   </body>
 </html>

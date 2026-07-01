@@ -151,8 +151,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Gallery Image for {self.product.title}"
-
-
+    
 
 # this is my inventory
 class Stock(models.Model):
@@ -177,3 +176,14 @@ class Stock(models.Model):
 
     def __str__(self):
         return f"{self.product.title} - {self.quantity}"
+    
+
+
+
+# this is my shipping costing handling model
+class ShippingSetting(models.Model):
+      shipping_charge = models.DecimalField(max_digits=10, decimal_places=2, default=390)
+      free_shipping_min_order = models.DecimalField(max_digits=10, decimal_places=2, default=5000)
+      
+      def __str__(self):
+        return "Shipping Settings"

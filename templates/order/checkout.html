@@ -2,186 +2,227 @@
 {% load static %}
 
 {% block content %}
-  <div class="container py-4">
+<div class="container py-5">
+    
     <form method="POST">
-      {% csrf_token %}
+        {% csrf_token %}
 
-      <div class="row g-4">
-        <!-- LEFT SIDE -->
-        <div class="col-lg-8">
-          <!-- ADDRESS -->
-          <div class="card border-0 shadow-sm rounded-3 mb-4">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-              <h5 class="fw-bold mb-0">
-                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
-                Delivery Address
-              </h5>
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-geo-alt-fill text-danger me-2"></i> Delivery Address
+                        </h5>
+                        {% if shipping_address %}
+                            <a href="{% url 'add_address_product' product.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-3">Change</a>
+                        {% endif %}
+                    </div>
 
-              {% if shipping_address %}
-                <a href="{% url 'add_address_product' product.id %}" class="btn btn-outline-primary btn-sm">Change</a>
-              {% endif %}
+                    <div class="card-body">
+                        {% if shipping_address %}
+                            <div class="bg-light rounded-3 p-3">
+                                <h5 class="fw-bold mb-2">{{ shipping_address.full_name }}</h5>
+                                <p class="mb-2">
+                                    <i class="bi bi-telephone-fill text-muted me-2"></i> {{ shipping_address.phone_number }}
+                                </p>
+                                <p class="text-muted mb-0">
+                                    <i class="bi bi-building text-muted me-2"></i> 
+                                    {{ shipping_address.address }}, {{ shipping_address.city }}, {{ shipping_address.province }}, {{ shipping_address.postal_code }}
+                                </p>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-geo-alt display-4 text-secondary"></i>
+                                <h5 class="mt-3 fw-bold">No Delivery Address</h5>
+                                <p class="text-muted small">Please add your delivery address to proceed with checkout.</p>
+                                <a href="{% url 'add_address' %}" class="btn btn-primary px-4 rounded-pill">Add Address</a>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-3">
+                    
+                    <div class="card-header bg-white py-3">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-bag-fill text-warning me-2"></i> Product Details
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            
+                            <div class="col-md-3 text-center">
+                                <img src="{{ product.image.url }}" class="img-fluid rounded border shadow-sm" alt="{{ product.title }}" style="max-height: 100px; object-fit: cover;" />
+                            </div>
+
+                            <div class="col-md-6 mt-3 mt-md-0">
+                                <h5 class="fw-bold mb-2">{{ product.title }}</h5>
+                                <p class="text-muted small mb-2">Brand: {{ product.brand_name }}</p>
+                                
+                                <div class="d-flex flex-wrap gap-1">
+                                    {% if product.is_on_sale %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger-subtle">{{ product.discount_percentage }}% OFF</span>
+                                    {% endif %}
+                                    {% if product.cash_on_delivery %}
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success-subtle">Cash On Delivery</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 text-md-end mt-3 mt-md-0">
+                                <div class="fs-4 fw-bold text-danger">Rs. {{ product.current_price }}</div>
+                                <div class="small fw-semibold mt-1" style="color: #f57224;">Quantity: 1</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="card-body">
-              {% if shipping_address %}
-                <div class="bg-light rounded p-3">
-                  <h5 class="fw-bold mb-2">{{ shipping_address.full_name }}</h5>
+            <div class="col-lg-4">
+                
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+    
+                    <div class="card-header bg-white py-3">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-shield-lock-fill me-2 text-success"></i> Select Payment Method
+                        </h5>
+                    </div>
 
-                  <p class="mb-2">
-                    <i class="bi bi-telephone-fill me-2"></i>
-                    {{ shipping_address.phone_number }}
-                  </p>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            
+                            <div class="col-6">
+                                <label class="w-100 h-100 m-0" style="cursor: pointer;">
+                                    <input checked type="radio" name="payment_method" value="COD" class="btn-check" id="cod" />
+                                    <div class="p-3 border rounded-3 text-center h-100 d-flex flex-column align-items-center justify-content-center bg-light" 
+                                         style="transition: all 0.2s ease-in-out; min-height: 90px; border-color: #dee2e6;"
+                                         onmouseover="this.style.borderColor='#f57224'; this.style.backgroundColor='#fff';"
+                                         onmouseout="if(!document.getElementById('cod').checked){ this.style.borderColor='#dee2e6'; this.style.backgroundColor='#f8f9fa'; }"
+                                         onclick="resetPaymentCards(); this.style.borderColor='#f57224'; this.style.backgroundColor='#fffaf7';">
+                                        
+                                        <span class="fs-2 text-secondary mb-1"><i class="bi bi-truck"></i></span>
+                                        <div class="fw-bold small text-dark">Cash On Delivery</div>
+                                        <div class="text-muted" style="font-size: 10px;">Pay at doorstep</div>
+                                    </div>
+                                </label>
+                            </div>
 
-                  <p class="mb-0 text-muted">{{ shipping_address.address }},
-                    {{ shipping_address.city }},
-                    {{ shipping_address.province }},
-                    {{ shipping_address.postal_code }}</p>
+                            <div class="col-6">
+                                <label class="w-100 h-100 m-0" style="cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="ESEWA" class="btn-check" id="esewa" />
+                                    <div class="p-3 border rounded-3 text-center h-100 d-flex flex-column align-items-center justify-content-center bg-light" 
+                                         style="transition: all 0.2s ease-in-out; border-left: 5px solid #60bb46 !important; min-height: 90px; border-color: #dee2e6;"
+                                         onmouseover="this.style.borderColor='#f57224'; this.style.backgroundColor='#fff';"
+                                         onmouseout="if(!document.getElementById('esewa').checked){ this.style.borderColor='#dee2e6'; this.style.backgroundColor='#f8f9fa'; }"
+                                         onclick="resetPaymentCards(); this.style.borderColor='#f57224'; this.style.backgroundColor='#fffaf7';">
+                                        
+                                        <span class="fs-3 fw-bold text-success" style="font-family: 'Poppins', sans-serif; letter-spacing: -1px; color: #60bb46 !important;">eSewa</span>
+                                        <div class="fw-bold small text-dark mt-1">Mobile Wallet</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="w-100 h-100 m-0" style="cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="KHALTI" class="btn-check" id="khalti" />
+                                    <div class="p-3 border rounded-3 text-center h-100 d-flex flex-column align-items-center justify-content-center bg-light" 
+                                         style="transition: all 0.2s ease-in-out; border-left: 5px solid #5c2d91 !important; min-height: 90px; border-color: #dee2e6;"
+                                         onmouseover="this.style.borderColor='#f57224'; this.style.backgroundColor='#fff';"
+                                         onmouseout="if(!document.getElementById('khalti').checked){ this.style.borderColor='#dee2e6'; this.style.backgroundColor='#f8f9fa'; }"
+                                         onclick="resetPaymentCards(); this.style.borderColor='#f57224'; this.style.backgroundColor='#fffaf7';">
+                                        
+                                        <span class="fs-3 fw-bold" style="font-family: 'Poppins', sans-serif; color: #5c2d91 !important; letter-spacing: -0.5px;">Khalti</span>
+                                        <div class="fw-bold small text-dark mt-1">Instant Pay</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="col-6">
+                                <label class="w-100 h-100 m-0" style="cursor: pointer;">
+                                    <input type="radio" name="payment_method" value="IME" class="btn-check" id="ime" />
+                                    <div class="p-3 border rounded-3 text-center h-100 d-flex flex-column align-items-center justify-content-center bg-light" 
+                                         style="transition: all 0.2s ease-in-out; border-left: 5px solid #ed1c24 !important; min-height: 90px; border-color: #dee2e6;"
+                                         onmouseover="this.style.borderColor='#f57224'; this.style.backgroundColor='#fff';"
+                                         onmouseout="if(!document.getElementById('ime').checked){ this.style.borderColor='#dee2e6'; this.style.backgroundColor='#f8f9fa'; }"
+                                         onclick="resetPaymentCards(); this.style.borderColor='#f57224'; this.style.backgroundColor='#fffaf7';">
+                                        
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="fs-4 fw-bold me-1" style="color: #ed1c24 !important; font-style: italic; font-family: 'Arial Black', sans-serif;">IME</span>
+                                            <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size: 10px; background-color: #ed1c24 !important;">Pay</span>
+                                        </div>
+                                        <div class="fw-bold small text-dark">Fast Checkout</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
-              {% else %}
-                <div class="text-center py-4">
-                  <i class="bi bi-geo-alt display-3 text-secondary"></i>
 
-                  <h5 class="mt-3">No Delivery Address</h5>
-
-                  <a href="{% url 'add_address' %}" class="btn btn-primary mt-3">Add Address</a>
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="fw-bold mb-0">Order Note</h5>
+                    </div>
+                    <div class="card-body">
+                        <textarea name="order_note" rows="4" class="form-control rounded-3" placeholder="Write a note for seller (Optional)..."></textarea>
+                    </div>
                 </div>
-              {% endif %}
+
+                <div class="card border-0 shadow-sm rounded-3">
+                    
+                    <div class="card-header bg-white py-3">
+                        <h5 class="fw-bold mb-0">Order Summary</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Product Price</span>
+                            <strong class="text-dark">Rs. {{ subtotal }}</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Shipping</span>
+                            <strong class="text-dark">Rs. {{ shipping }}</strong>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3 text-success">
+                            <span>Voucher Discount</span>
+                            <strong>- Rs. {{ discount }}</strong>
+                        </div>
+
+                        <hr class="my-3 text-muted" />
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="mb-0 fw-bold">Total</h4>
+                            <h3 class="text-danger fw-bold mb-0">Rs. {{ total }}</h3>
+                        </div>
+
+                        <button type="submit" class="btn btn-lg w-100 text-white fw-bold py-2 rounded-3 shadow" style="background:#f57224;">
+                            PLACE ORDER
+                        </button>
+
+                        <div class="mt-4 bg-light p-3 rounded-3">
+                            <div class="small text-success mb-2"><i class="bi bi-shield-check me-2"></i>Secure Checkout</div>
+                            <div class="small text-success mb-2"><i class="bi bi-patch-check me-2"></i>100% Buyer Protection</div>
+                            <div class="small text-success"><i class="bi bi-truck me-2"></i>Cash On Delivery Available</div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-          </div>
-
-          <!-- PRODUCT -->
-          <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white py-3">
-              <h5 class="fw-bold mb-0">
-                <i class="bi bi-bag-fill text-warning me-2"></i>
-
-                Product Details
-              </h5>
-            </div>
-
-            <div class="card-body">
-              <div class="row align-items-center">
-                <div class="col-md-3 text-center">
-                  <img src="{{ product.image.url }}" class="img-fluid rounded border" alt="{{ product.title }}" />
-                </div>
-
-                <div class="col-md-6">
-                  <h5 class="fw-bold">{{ product.title }}</h5>
-
-                  <p class="text-muted mb-2">Brand :
-                    {{ product.brand_name }}</p>
-
-                  {% if product.is_on_sale %}
-                    <span class="badge bg-danger">{{ product.discount_percentage }}% OFF</span>
-                  {% endif %}
-
-                  {% if product.cash_on_delivery %}
-                    <span class="badge bg-success">Cash On Delivery</span>
-                  {% endif %}
-                </div>
-
-                <div class="col-md-3 text-md-end mt-3 mt-md-0">
-                  <div class="fs-5 fw-bold text-danger">Rs. {{ product.current_price }}</div>
-
-                  <div class="text-muted" style="color: #f57224;">quantity:1</div>
-                </div>
-              </div>
-            </div>
-          </div>
+            
         </div>
-
-        <!-- RIGHT SIDE -->
-        <div class="col-lg-4">
-          <!-- PAYMENT -->
-          <div class="card border-0 shadow-sm rounded-3 mb-4">
-            <div class="card-header bg-white py-3">
-              <h5 class="fw-bold mb-0">Payment Method</h5>
-            </div>
-
-            <div class="card-body">
-              <div class="form-check border rounded p-3 mb-3">
-                <input checked class="form-check-input" type="radio" name="payment_method" value="COD" id="cod" />
-
-                <label class="form-check-label ms-2" for="cod">Cash On Delivery</label>
-              </div>
-
-              <div class="form-check border rounded p-3 mb-3">
-                <input class="form-check-input" type="radio" name="payment_method" value="ESEWA" id="esewa" />
-
-                <label class="form-check-label ms-2" for="esewa">eSewa</label>
-              </div>
-
-              <div class="form-check border rounded p-3 mb-3">
-                <input class="form-check-input" type="radio" name="payment_method" value="KHALTI" id="khalti" />
-
-                <label class="form-check-label ms-2" for="khalti">Khalti</label>
-              </div>
-
-              <div class="form-check border rounded p-3">
-                <input class="form-check-input" type="radio" name="payment_method" value="IME" id="ime" />
-
-                <label class="form-check-label ms-2" for="ime">IME Pay</label>
-              </div>
-            </div>
-          </div>
-
-          <!-- ORDER NOTE -->
-          <div class="card border-0 shadow-sm rounded-3 mb-4">
-            <div class="card-header bg-white py-3">
-              <h5 class="fw-bold mb-0">Order Note</h5>
-            </div>
-
-            <div class="card-body">
-              <textarea name="order_note" rows="4" class="form-control" placeholder="Write a note for seller (Optional)"></textarea>
-            </div>
-          </div>
-
-          <!-- ORDER SUMMARY -->
-          <div class="card border-0 shadow-sm rounded-3">
-            <div class="card-header bg-white py-3">
-              <h5 class="fw-bold mb-0">Order Summary</h5>
-            </div>
-
-            <div class="card-body">
-              <div class="d-flex justify-content-between mb-3">
-                <span>Product Price</span>
-
-                <strong>Rs. {{ subtotal }}</strong>
-              </div>
-
-              <div class="d-flex justify-content-between mb-3">
-                <span>Shipping</span>
-
-                <strong>Rs. {{ shipping }}</strong>
-              </div>
-
-              <div class="d-flex justify-content-between mb-3 text-success">
-                <span>Voucher Discount</span>
-
-                <strong>- Rs. {{ discount }}</strong>
-              </div>
-
-              <hr />
-
-              <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="mb-0">Total</h4>
-
-                <h3 class="text-danger fw-bold mb-0">Rs. {{ total }}</h3>
-              </div>
-
-              <button type="submit" class="btn btn-lg w-100 text-white fw-bold" style="background:#f57224;">PLACE ORDER</button>
-
-              <div class="mt-4">
-                <div class="small text-success mb-2">✓ Secure Checkout</div>
-
-                <div class="small text-success mb-2">✓ 100% Buyer Protection</div>
-
-                <div class="small text-success">✓ Cash On Delivery Available</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </form>
-  </div>
+</div>
 {% endblock %}

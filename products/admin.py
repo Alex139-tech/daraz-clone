@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Voucher, ProductImage
+from .models import Product, Category, Voucher, ProductImage,Stock,ShippingSetting
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -71,3 +71,89 @@ class VoucherAdmin(admin.ModelAdmin):
     list_display = ('discount_title', 'product', 'min_spend', 'is_active')
     list_filter = ('is_active',)
     search_fields = ('discount_title', 'product__title')
+
+
+
+# this is my inventory stock admin
+@admin.register(Stock)
+class StockAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for Product Inventory.
+    """
+
+    list_display = (
+        "product",
+        "quantity",
+        "stock_status",
+        "low_stock_alert",
+        "updated_at",
+    )
+
+    list_filter = (
+        "updated_at",
+    )
+
+    search_fields = (
+        "product__title",
+    )
+
+    list_editable = (
+        "quantity",
+        "low_stock_alert",
+    )
+
+    readonly_fields = (
+        "updated_at",
+    )
+
+    ordering = (
+        "quantity",
+    )
+
+    fieldsets = (
+        (
+            "Product Information",
+            {
+                "fields": (
+                    "product",
+                )
+            },
+        ),
+        (
+            "Inventory",
+            {
+                "fields": (
+                    "quantity",
+                    "low_stock_alert",
+                )
+            },
+        ),
+        (
+            "System Information",
+            {
+                "fields": (
+                    "updated_at",
+                )
+            },
+        ),
+    )
+
+    @admin.display(description="Stock Status")
+    def stock_status(self, obj):
+
+        if obj.quantity == 0:
+            return "❌ Out of Stock"
+
+        elif obj.quantity <= obj.low_stock_alert:
+            return "🟠 Low Stock"
+
+        return "🟢 In Stock"
+    
+
+# this is my shiping costing handling admin
+@admin.register(ShippingSetting)
+class ShippingSettingAdmin(admin.ModelAdmin):
+    list_display = ("shipping_charge", "free_shipping_min_order")
+
+    def has_add_permission(self, request):
+        return ShippingSetting.objects.count() == 0

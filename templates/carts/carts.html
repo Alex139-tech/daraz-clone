@@ -13,19 +13,20 @@
           <div class="card-header bg-white">
             <div class="d-flex justify-content-between align-items-center">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="selectAll" checked />
+                <input class="form-check-input" type="checkbox" id="selectAll" />
 
-                <label class="form-check-label fw-bold" for="selectAll">SELECT ALL (<span id="selected-count-header">0</span>)</label>
+                <label class="form-check-label fw-semibold select-all-label" for="selectAll">
+                  Select All
+                  <span class="selected-badge">(<span id="selected-count-header"></span>)</span>
+                </label>
               </div>
 
-              <button class="btn btn-sm btn-link text-danger" id="deleteSelected">
-                <i class="bi bi-trash"></i>
-
-                Delete
+              <button id="deleteSelected" class="btn btn-outline-danger btn-sm px-4 rounded-pill fw-semibold">
+                <i class="bi bi-trash3-fill me-2"></i>
+                Delete Selected
               </button>
             </div>
           </div>
-
           <!-- Body -->
 
           <div class="card-body p-0">
@@ -79,11 +80,10 @@
 
                     <div class="col-md-2">
                       <div class="input-group">
-                        <a href="{% url 'decrease_quantity' item.product.id %}" class="btn btn-outline-secondary btn-minus">-</a>
-
+                        <button type="button" class="btn-minus" data-url="{% url 'decrease_quantity' item.product.id %}">-</button>
                         <input type="text" value="{{ item.quantity }}" class="form-control text-center quantity" readonly />
 
-                        <a href="{% url 'increase_quantity' item.product.id %}" class="btn btn-outline-secondary">+</a>
+                        <button type="button" class="btn-plus" data-url="{% url 'increase_quantity' item.product.id %}">+</button>
                       </div>
                     </div>
                   </div>
@@ -130,7 +130,7 @@
               <strong>
                 Rs.
 
-                <span id="shipping-val">390.00</span>
+                <span id="shipping-val">{{ shipping.shipping_charge }}</span>
               </strong>
             </div>
 
@@ -166,7 +166,7 @@
               <h4 class="text-danger">
                 Rs.
 
-                <span id="grand-total-val">0.00</span>
+                <span id="grand-total-val">{{ total }}</span>
               </h4>
             </div>
 

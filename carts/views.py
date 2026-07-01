@@ -1,36 +1,53 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import Cart, CartItem
-from products.models import Product
+from products.models import Product,ShippingSetting
+from decimal import Decimal
 
 
 # ==========================================
 # CART PAGE
 # ==========================================
 
+
 @login_required
 def cart_view(request):
 
-    cart, created = Cart.objects.get_or_create(
-        user=request.user
-    )
+    cart, created = Cart.objects.get_or_create(user=request.user)
+
+    shipping_setting = ShippingSetting.objects.first()
 
     cart_items = cart.cart_items.select_related("product")
+
+    subtotal = Decimal("0.00")
+
+    for item in cart_items:
+        subtotal += item.total_price
+
+    shipping = (
+        shipping_setting.shipping_charge
+        if shipping_setting
+        else Decimal("0.00")
+    )
+
+    total = subtotal + shipping
 
     context = {
         "cart": cart,
         "cart_items": cart_items,
+        "shipping": shipping_setting,
+        "subtotal": subtotal,
+        "total": total,
     }
 
     return render(
         request,
         "carts/carts.html",
-        context
+        context,
     )
-
-
 # ==========================================
 # ADD TO CART
 # ==========================================
@@ -103,54 +120,22 @@ def remove_from_cart(request, product_id):
 
 @login_required
 def increase_quantity(request, product_id):
-
-    cart = get_object_or_404(
-        Cart,
-        user=request.user
-    )
-
-    cart_item = get_object_or_404(
-        CartItem,
-        cart=cart,
-        product_id=product_id
-    )
-
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)
+    
     cart_item.quantity += 1
-
     cart_item.save(update_fields=["quantity"])
+    return JsonResponse({"status": "success", "quantity": cart_item.quantity})
 
-    return redirect("cart_view")
-
-
-# ==========================================
-# DECREASE
-# ==========================================
 
 @login_required
 def decrease_quantity(request, product_id):
-
-    cart = get_object_or_404(
-        Cart,
-        user=request.user
-    )
-
-    cart_item = get_object_or_404(
-        CartItem,
-        cart=cart,
-        product_id=product_id
-    )
-
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_item = get_object_or_404(CartItem, cart=cart, product_id=product_id)
+    
     if cart_item.quantity > 1:
-
         cart_item.quantity -= 1
-
         cart_item.save(update_fields=["quantity"])
-
-    else:
-
-        messages.warning(
-            request,
-            "Minimum quantity is 1."
-        )
-
-    return redirect("cart_view")
+        return JsonResponse({"status": "success", "quantity": cart_item.quantity})
+    
+    return JsonResponse({"status": "error", "message": "Minimum quantity is 1."}, status=400)

@@ -137,11 +137,9 @@ STATICFILES_DIRS = [
 ]
 
 # this is my media configrations
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+# True Media Configurations
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # user lgoin urls
 LOGIN_URL = "/accounts/login"
